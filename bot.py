@@ -1,7 +1,7 @@
 import logging
 from telegram import Update
 from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, MessageHandler, filters
-from response import clasify
+from response import translate
 with open('./token.txt', 'r') as f:
     TOKEN = f.read()
     
@@ -14,7 +14,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id, text="SIS int bot baby")
 
 async def message_predict(update: Update, context):
-    await update.message.reply_text(clasify(update.message.text))
+    await update.message.reply_text(translate(update.message.text))
 
 
 if __name__ == '__main__':

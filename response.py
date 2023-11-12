@@ -1,12 +1,19 @@
-from transformers import pipeline
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+
+tokenizer = AutoTokenizer.from_pretrained("Helsinki-NLP/opus-mt-es-en")
 
 
-classifier = pipeline(task="text-classification", model="SamLowe/roberta-base-go_emotions", top_k=None)
+model = AutoModelForSeq2SeqLM.from_pretrained("Helsinki-NLP/opus-mt-es-en")
 
-def clasify(sentence):
+
+def translate(sentence):
     
-    model_outputs = classifier(sentence)
+    inputs = tokenizer(sentence, return_tensors="pt")
+    print(inputs)
 
-    for emotion in model_outputs[0]:
-        if emotion['score'] > 0.5:
-            return emotion['label']
+    outputs = model.generate(**inputs)
+    print(outputs)
+
+    translation = tokenizer.batch_decode(outputs, skip_special_tokens=True)[0]
+    print(translation)
+    return translation
